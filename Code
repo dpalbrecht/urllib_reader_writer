@@ -11,7 +11,7 @@ import time
 import sys, os
 
 # Ask the user for a URL and attempt to obtain a handle
-website = input('Enter a URL you want to use to scrape: ') # WHY DOES THE POKEMON WEBSITE NOT WORK
+website = input('Enter a URL you want to use to scrape: ')
 try:
     fhand = urllib.request.urlopen(website)
 except:
