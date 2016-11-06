@@ -1,0 +1,67 @@
+# urllib_reader_writer
+This project uses the urllib and urllib2 libraries to read and scrape a given URL and write the output to a file.
+
+"""
+Created by David Albrecht
+Written in Python version 3.5
+"""
+
+# Import all necessary libraries
+import urllib.request, urllib.parse, urllib.error
+import time
+import sys, os
+
+# Ask the user for a URL and attempt to obtain a handle
+website = input('Enter a URL you want to use to scrape: ') # WHY DOES THE POKEMON WEBSITE NOT WORK
+try:
+    fhand = urllib.request.urlopen(website)
+except:
+    print('Sorry, that URL is invalid or non-existent. Please try again!')
+    sys.exit(0)
+
+# Ask the user for a file name and check to see if it exists. Replace/create the new file
+os.chdir(# Change the directory for file creation)   
+fname = input('Enter the file name you will save to: ') + '.txt'
+if os.path.exists(fname):
+    fwrite = input(fname + ' already exists. Replace it? (Y/n)? ')
+    if fwrite == 'n':
+        print('Data not copied. Try again!')
+        sys.exit(0)
+    elif fwrite == 'Y':
+        print('Replacing ' + fname, end = '\n\n')
+    else:
+        print('Please choose \'Y\' or \'n\' next time. Try again!')
+        sys.exit(0)
+new_file = open(fname, 'w')    
+
+# Initialize counts for the following loop,
+# how many characters to read at a time ('read'),
+# and how many characters to display ('target')     
+size = 0
+string_count = ''
+term = 1
+read = 2048
+target = 3000
+
+# Read through the given URL at the 'read' character speed
+while True:
+    info = fhand.read(read)  
+    time.sleep(0.25)
+    if len(info) < 1:
+        break
+    countdown = target - size
+    size += len(info)
+    string_count += info.decode()
+    if size <= target:
+        print(info.decode())
+        start_slice = size
+    if term == 1:
+        if size >= target:  
+            print(string_count[start_slice:(start_slice + countdown)])
+            term -= 1          
+    new_file.write(str(str(info).encode('utf8')))
+
+# Close the file and display the total number of characters
+new_file.close()
+print('The total number of characters is: ' + str(size))
+
